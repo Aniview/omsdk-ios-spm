@@ -1,0 +1,10 @@
+.DS_Store
+.swiftpm/
+.build/
+*.xcuserstate
+xcuserdata/
+
+# The binary itself is distributed only as a GitHub release asset (see README),
+# never committed to git — same pattern as ad-player-lite-ios-spm.
+/OMSDK_Aniview.xcframework/
+/OMSDK_Aniview.zip
