@@ -1,5 +1,11 @@
 # omsdk-ios-spm
 
+> **Internal use only.** This is not an independent, publicly supported SPM package.
+> It exists solely to distribute Aniview's own IAB-registered OM SDK partner build to
+> other Aniview iOS projects (e.g. `ad-player-lite-ios`). Don't depend on it from
+> outside Aniview, and don't expect semver guarantees beyond "matches what Aniview's
+> own consumers need."
+
 SPM distribution wrapper for the IAB Open Measurement SDK.
 IAB doesn't publish OM SDK as an SPM package — it ships as a raw XCFramework per
 registered partner. This repo exists solely to host that XCFramework behind a normal
