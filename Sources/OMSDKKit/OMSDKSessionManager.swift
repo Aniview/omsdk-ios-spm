@@ -8,6 +8,7 @@
 //  Reference: https://interactiveadvertisingbureau.github.io/Open-Measurement-SDKiOS/#webview-video
 //
 
+import Foundation
 import WebKit
 import OMSDK_Aniview
 import os
@@ -126,10 +127,23 @@ public final class OMSDKSessionManager {
     // MARK: Friendly obstructions (close button, skip button, captions, etc.)
     public func addFriendlyObstruction(_ view: UIView, purpose: OMSDKFriendlyObstructionPurpose, detailedReason: String?) {
         do {
-            try session?.addFriendlyObstruction(view, purpose: mapPurpose(purpose), detailedReason: detailedReason)
+            try session?.addFriendlyObstruction(view, purpose: mapPurpose(purpose), detailedReason: sanitizedDetailedReason(detailedReason))
         } catch {
             Self.logger.error("OMSDK: addFriendlyObstruction failed: \(String(describing: error))")
         }
+    }
+
+    private static let maxDetailedReasonLength = 50
+    private static let allowedDetailedReasonCharacters = CharacterSet(charactersIn:
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ")
+
+    // OM SDK requires detailedReason to be <=50 chars, alphanumeric/spaces only — strip
+    // anything else out first, then truncate. Returns nil if nothing valid remains.
+    private func sanitizedDetailedReason(_ reason: String?) -> String? {
+        guard let reason else { return nil }
+        let filtered = String(reason.unicodeScalars.filter { Self.allowedDetailedReasonCharacters.contains($0) })
+        guard !filtered.isEmpty else { return nil }
+        return String(filtered.prefix(Self.maxDetailedReasonLength))
     }
 
     public func removeFriendlyObstruction(_ view: UIView) {
